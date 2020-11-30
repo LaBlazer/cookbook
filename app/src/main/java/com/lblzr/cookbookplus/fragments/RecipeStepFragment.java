@@ -39,12 +39,8 @@ public class RecipeStepFragment extends Fragment {
 
         // Load step image
         if(step.hasImage()) {
-            File imgFile = new File(FileHelper.getFullPath(step.getImage()));
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ImageView image = (ImageView) view.findViewById(R.id.imageStep);
-                image.setImageBitmap(myBitmap);
-            }
+            ImageView image = (ImageView) view.findViewById(R.id.imageStep);
+            image.setImageBitmap(FileHelper.getBitmap(step.getImage()));
         }
 
         // Load step title and description

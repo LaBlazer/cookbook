@@ -13,9 +13,11 @@ import com.lblzr.cookbookplus.models.Recipe;
 import com.lblzr.cookbookplus.models.Step;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.View;
 
@@ -32,13 +34,14 @@ public class RecipeActivity extends AppCompatActivity {
     private Recipe recipe;
     private ArrayList<Fragment> fragments;
 
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        Toolbar toolbar = findViewById(R.id.toolbarRecipe);
-        FloatingActionButton fab = findViewById(R.id.fabRecipe);
-        setSupportActionBar(toolbar);
+        initActionBar();
+        fab = findViewById(R.id.fabRecipe);
 
         if(getIntent().getSerializableExtra("recipe") != null) {
             //recipe = (Recipe) getIntent().getSerializableExtra("recipe");
@@ -71,15 +74,26 @@ public class RecipeActivity extends AppCompatActivity {
                     // switch step
                     currentStep++;
 
-                    Fragment f = fragments.get(currentStep);
-                    getSupportFragmentManager().beginTransaction().add(R.id.flRecipe,
-                            f).addToBackStack("Step " + currentStep).commit();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
+                    ft.replace(R.id.flRecipe, fragments.get(currentStep));
+                    ft.addToBackStack("Step " + currentStep);
+                    ft.commit();
                     updateTitle();
                 }
             }
         });
 
         updateTitle();
+    }
+
+    private void initActionBar() {
+        Toolbar toolbar = findViewById(R.id.toolbarRecipe);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -89,13 +103,20 @@ public class RecipeActivity extends AppCompatActivity {
         updateTitle();
     }
 
-    private void setStep(int step) {
-
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void updateTitle() {
         setTitle(currentStep == 0 ? recipe.getName() : "Step " + currentStep);
+
+        if(currentStep == recipe.getStepAmount()) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
     }
 
     @AfterPermissionGranted(REQUEST_CODE_STORAGE)

@@ -1,6 +1,8 @@
 package com.lblzr.cookbookplus.models;
 
-public class Step {
+import java.io.Serializable;
+
+public class Step implements Serializable {
     private String name;
     private String image;
     private String description;

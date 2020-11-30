@@ -1,8 +1,9 @@
 package com.lblzr.cookbookplus.models;
 
+import java.io.Serializable;
 import java.util.Locale;
 
-public class Ingredient {
+public class Ingredient implements Serializable {
     public enum AmountUnit {
         GRAMS,
         LITRES,
@@ -13,12 +14,19 @@ public class Ingredient {
     private String name;
     private double amount;
     private AmountUnit unit;
+    private boolean optional;
 
-    public Ingredient(String name, double amount, AmountUnit unit) {
+    public Ingredient(String name, double amount, AmountUnit unit, boolean optional) {
         this.name = name.toLowerCase();
         this.amount = amount;
         this.unit = unit;
+        this.optional = optional;
     }
+
+    public Ingredient(String name, double amount, AmountUnit unit) {
+        this(name, amount, unit, false);
+    }
+
 
     public String getName() {
         return name;
@@ -28,20 +36,28 @@ public class Ingredient {
         return amount;
     }
 
+    private static String formatDouble(double d)
+    {
+        if(d == (long) d)
+            return String.format(Locale.ENGLISH, "%d", (long)d);
+        else
+            return String.format(Locale.ENGLISH, "%.3f", d);
+    }
+
     private String formatLitres(double amount) {
         if(amount < 1.) {
-            return String.format(Locale.ENGLISH, "%dml", (int)(amount * 1000));
+            return String.format(Locale.ENGLISH, "%dml", (long)(amount * 1000));
         }
 
-        return String.format(Locale.ENGLISH, "%f.2l", amount);
+        return formatDouble(amount) + "l";
     }
 
     private String formatGrams(double amount) {
         if(amount >= 1000.) {
-            return String.format(Locale.ENGLISH, "%dkg", (int)(amount / 1000));
+            return String.format(Locale.ENGLISH, "%dkg", (long)(amount / 1000));
         }
 
-        return String.format(Locale.ENGLISH, "%dg", (int)amount);
+        return formatDouble(amount) + "g";
     }
 
     public String getAmountString() {

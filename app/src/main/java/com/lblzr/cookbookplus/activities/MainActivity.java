@@ -1,8 +1,10 @@
-package com.lblzr.cookbookplus;
+package com.lblzr.cookbookplus.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.lblzr.cookbookplus.R;
 
 public class MainActivity extends AppCompatActivity {
 

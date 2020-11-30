@@ -1,24 +1,44 @@
 package com.lblzr.cookbookplus.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Recipe {
+public class Recipe implements Serializable {
 
-    ArrayList<Ingredient> ingredients;
-    ArrayList<Step> steps;
+    private ArrayList<Ingredient> ingredients;
+    private ArrayList<Step> steps;
+    private String name;
+    private String image;
 
-    public Recipe() {
-        ingredients = new ArrayList<>();
-        steps = new ArrayList<>();
+    public Recipe(String name) {
+        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), null);
     }
 
-    public Recipe(ArrayList<Ingredient> ingredients, ArrayList<Step> steps) {
+    public Recipe(String name, String image) {
+        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), image);
+    }
+
+    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps) {
+        this(name, ingredients, steps, null);
+    }
+
+    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, String image) {
+        this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
+        this.image = image;
     }
 
     public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public boolean hasImage() {
+        return image != null;
     }
 
     public void addStep(Step step) {
@@ -39,12 +59,11 @@ public class Recipe {
         return steps.size();
     }
 
-    public String getStepDescription(int step) {
-        return steps.get(step).getDescription();
+    public Step getStep(int step) {
+        return steps.get(step);
     }
 
-    public String getStepName(int step) {
-        return steps.get(step).getName();
+    public String getName() {
+        return name;
     }
-
 }

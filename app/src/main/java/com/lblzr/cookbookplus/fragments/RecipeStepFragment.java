@@ -50,4 +50,5 @@ public class RecipeStepFragment extends Fragment {
         text.setText(step.getDescription());
 
     }
+
 }

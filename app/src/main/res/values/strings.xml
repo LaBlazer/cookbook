@@ -32,4 +32,8 @@
     <string name="recipeTime">Duration</string>
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
+    <string name="amount">Amount</string>
+    <string name="step">Step Name</string>
+    <string name="description">Description</string>
+    <string name="ingredientName">Ingredient</string>
 </resources>

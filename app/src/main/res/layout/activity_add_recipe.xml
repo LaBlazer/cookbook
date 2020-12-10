@@ -48,7 +48,9 @@
                     android:src="@drawable/ic_baseline_photo_camera_24"
                     android:contentDescription="Recipe Photo"
                     android:backgroundTint="@color/colorAccent"
-                    tools:ignore="MissingConstraints" />
+                    tools:ignore="MissingConstraints"
+                    android:scaleType="centerCrop"
+                    android:padding="150dp"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

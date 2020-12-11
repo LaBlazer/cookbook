@@ -21,7 +21,7 @@ import com.lblzr.cookbookplus.models.AmountUnit;
 
 import java.util.ArrayList;
 
-public class AddIngredientActivity extends AppCompatActivity {
+public class IngredientEditActivity extends AppCompatActivity {
 
     final int REQUEST_CODE_CAMERA = 420;
 
@@ -48,7 +48,7 @@ public class AddIngredientActivity extends AppCompatActivity {
         inputUnit = findViewById(R.id.inputIngredientUnit);
         checkOptional = findViewById(R.id.checkboxOptional);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddIngredientActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(IngredientEditActivity.this,
                 R.layout.item_dropdown, units);
 
         inputUnit.setAdapter(adapter);

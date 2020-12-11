@@ -31,6 +31,26 @@ public class Recipe implements Serializable {
         this.duration = duration;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void setSteps(ArrayList<Step> steps) {
+        this.steps = steps;
+    }
+
     public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
     }
@@ -53,6 +73,10 @@ public class Recipe implements Serializable {
 
     public void addStep(Step step) {
         steps.add(step);
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public String getIngredientsString() {

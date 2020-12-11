@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,7 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class AddRecipeActivity extends AppCompatActivity {
+public class RecipeEditActivity extends AppCompatActivity {
 
     final int REQUEST_CODE_CAMERA = 420;
     final int REQUEST_CODE_INGREDIENT = 666;
@@ -98,7 +96,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN ) {
                     TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(AddRecipeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    mTimePicker = new TimePickerDialog(RecipeEditActivity.this, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             txtInputTime.setText(String.format(Locale.ENGLISH, "%dh %dm", selectedHour, selectedMinute));
@@ -127,7 +125,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(AddRecipeActivity.this,
+                        Uri photoURI = FileProvider.getUriForFile(RecipeEditActivity.this,
                                 "com.example.android.fileprovider",
                                 photoFile);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -140,7 +138,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         btnAddIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent data = new Intent(getApplicationContext(), AddIngredientActivity.class);
+                Intent data = new Intent(getApplicationContext(), IngredientEditActivity.class);
 //                data.putExtra("name", txtInputName.getText().toString());
 //                data.putExtra("amount", Float.parseFloat(txtInputAmount.getText().toString()));
 //                data.putExtra("unit", selectedUnit);
@@ -152,7 +150,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         btnAddStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent data = new Intent(getApplicationContext(), AddStepActivity.class);
+                Intent data = new Intent(getApplicationContext(), StepEditActivity.class);
 //                data.putExtra("name", txtInputName.getText().toString());
 //                data.putExtra("amount", Float.parseFloat(txtInputAmount.getText().toString()));
 //                data.putExtra("unit", selectedUnit);
@@ -187,8 +185,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE_CAMERA && photoFile != null){
-                Snackbar.make(fab, "Photo taken", Snackbar.LENGTH_SHORT).show();
-
                 btnRecipeImage.setPadding(0, 0, 0, 0);
                 btnRecipeImage.setImageBitmap(FileHelper.getBitmap(photoFile));
 

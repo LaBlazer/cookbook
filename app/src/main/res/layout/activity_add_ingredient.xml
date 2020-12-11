@@ -71,6 +71,7 @@
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_baseline_check_24"
         android:layout_margin="20dp"
+
         />
 
 </RelativeLayout>

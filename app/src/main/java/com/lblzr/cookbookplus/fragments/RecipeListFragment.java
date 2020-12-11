@@ -16,9 +16,11 @@ import androidx.fragment.app.Fragment;
 
 import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.helpers.FileHelper;
+import com.lblzr.cookbookplus.helpers.RecipeSerializer;
 import com.lblzr.cookbookplus.helpers.RecipesArrayAdapter;
 import com.lblzr.cookbookplus.models.Recipe;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class RecipeListFragment extends Fragment {
@@ -30,7 +32,7 @@ public class RecipeListFragment extends Fragment {
 
     RecipeSelectedListener selectedListener;
     ListView list;
-    ArrayList<Recipe> recipes = new ArrayList<>();
+    ArrayList<Recipe> recipes;
     RecipesArrayAdapter arrayAdapter;
     long checkedItem;
 
@@ -53,6 +55,9 @@ public class RecipeListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Load saved recipes
+        recipes = RecipeSerializer.LoadAll(getContext());
 
         arrayAdapter = new RecipesArrayAdapter(getContext(), recipes);
 

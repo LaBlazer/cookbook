@@ -2,10 +2,7 @@ package com.lblzr.cookbookplus.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Notification;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,7 +27,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AddStepActivity extends AppCompatActivity {
+import static com.lblzr.cookbookplus.helpers.FileHelper.getBase64FromBitmap;
+
+public class StepEditActivity extends AppCompatActivity {
 
     final int REQUEST_CODE_CAMERA = 420;
 
@@ -71,7 +70,7 @@ public class AddStepActivity extends AppCompatActivity {
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(AddStepActivity.this,
+                        Uri photoURI = FileProvider.getUriForFile(StepEditActivity.this,
                                 "com.example.android.fileprovider",
                                 photoFile);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);

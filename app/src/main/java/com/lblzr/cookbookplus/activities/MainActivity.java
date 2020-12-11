@@ -1,11 +1,13 @@
 package com.lblzr.cookbookplus.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -15,6 +17,8 @@ import com.lblzr.cookbookplus.fragments.AboutFragment;
 import com.lblzr.cookbookplus.fragments.RecipeListFragment;
 import com.lblzr.cookbookplus.fragments.SettingsFragment;
 import com.lblzr.cookbookplus.helpers.FileHelper;
+import com.lblzr.cookbookplus.helpers.RecipeSerializer;
+import com.lblzr.cookbookplus.helpers.RecipeStore;
 import com.lblzr.cookbookplus.models.Ingredient;
 import com.lblzr.cookbookplus.models.Recipe;
 import com.lblzr.cookbookplus.models.Step;
@@ -23,14 +27,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, RecipeListFragment.RecipeSelectedListener {
@@ -50,9 +51,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Delete old images
+        FileHelper.deleteFiles(getApplicationContext(), "jpg");
+
         toolbarSelect = findViewById(R.id.toolbarSelect);
         toolbarDefault = findViewById(R.id.toolbarDefault);
         setSupportActionBar(toolbarDefault);
+
+        // Update username
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View header = navigationView.getHeaderView(0);
+        TextView txtEmail = header.findViewById(R.id.textUsername);
+        SharedPreferences sp = getSharedPreferences(
+                "com.lblzr.cookbook.settings", Context.MODE_PRIVATE);
+        txtEmail.setText(sp.getString("email", "Unregistered"));
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View view) {
                 //recipeListFragment.addRecipe("Recipe " + ++id);
 
-                Intent data = new Intent(getApplicationContext(), AddRecipeActivity.class);
+                Intent data = new Intent(getApplicationContext(), RecipeEditActivity.class);
 //                data.putExtra("name", txtInputName.getText().toString());
 //                data.putExtra("amount", Float.parseFloat(txtInputAmount.getText().toString()));
 //                data.putExtra("unit", selectedUnit);
@@ -76,9 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         if(savedInstanceState == null) {
             recipeListFragment = new RecipeListFragment();
 
@@ -86,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_recipes);
             setTitle("Recipes");
         }
-
-
     }
 
     @Override
@@ -96,12 +104,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == REQUEST_CODE_RECIPE && resultCode == Activity.RESULT_OK) {
 
             try {
+                // Convert images to base64 and create recipe object
+
+                ArrayList<Step> steps = (ArrayList<Step>) data.getSerializableExtra("steps");
+                for(Step s : steps) {
+                    s.setImage(FileHelper.getBase64FromBitmap(FileHelper.getBitmap(getApplicationContext(), s.getImage())));
+                }
+
                 Recipe r = new Recipe(
                         data.getStringExtra("name"),
                         (ArrayList<Ingredient>) data.getSerializableExtra("ingredients"),
-                        (ArrayList<Step>) data.getSerializableExtra("steps"),
-                        data.getStringExtra("image"),
+                        steps,
+                        FileHelper.getBase64FromBitmap(FileHelper.getBitmap(getApplicationContext(), data.getStringExtra("image"))),
                         data.getIntExtra("duration", 0));
+                // Save the recipe and add it to the list
+                RecipeSerializer.Save(getApplicationContext(), r);
                 recipeListFragment.addRecipe(r);
             } catch (Exception ex) {
                 Snackbar.make(fab, "Error while getting recipe", Snackbar.LENGTH_LONG).show();
@@ -141,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-//        Snackbar.make(fab, item.getTitle(), Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show();
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -156,8 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRecipeClicked(Recipe recipe) {
-        Intent data = new Intent(getApplicationContext(), RecipeActivity.class);
-        data.putExtra("recipe", recipe);
+        Intent data = new Intent(getApplicationContext(), RecipeViewActivity.class);
+        RecipeStore.setCurrentRecipe(recipe);
         startActivity(data);
     }
 
@@ -167,10 +181,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbarSelect.setVisibility(View.GONE);
     }
 
-    //    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
 }

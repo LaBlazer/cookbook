@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.fragments.RecipeIngredientsFragment;
 import com.lblzr.cookbookplus.fragments.RecipeStepFragment;
+import com.lblzr.cookbookplus.helpers.RecipeStore;
 import com.lblzr.cookbookplus.models.AmountUnit;
 import com.lblzr.cookbookplus.models.Ingredient;
 import com.lblzr.cookbookplus.models.Recipe;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeViewActivity extends AppCompatActivity {
 
     final int REQUEST_CODE_STORAGE = 666;
 
@@ -44,15 +45,7 @@ public class RecipeActivity extends AppCompatActivity {
         initActionBar();
         fab = findViewById(R.id.fabRecipe);
 
-        if(getIntent().getSerializableExtra("recipe") != null) {
-            recipe = (Recipe) getIntent().getSerializableExtra("recipe");
-        } else {
-            Snackbar.make(fab, "Invalid activity extras",
-                    Snackbar.LENGTH_LONG).show();
-            recipe = new Recipe("Fajnovy receptik", "test.jpg");
-
-        }
-
+        recipe = RecipeStore.getCurrentRecipe();
         currentStep = 0;
 
         // Create array of step fragments

@@ -30,7 +30,7 @@ public class StepsArrayAdapter extends ArrayAdapter<Step> {
 
         TextView name = (TextView) convertView.findViewById(R.id.itemStepName);
 
-        name.setText(step.getName());
+        name.setText((position + 1) + ". " + step.getName());
 
         return convertView;
     }

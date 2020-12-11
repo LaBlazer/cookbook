@@ -19,7 +19,7 @@
         android:textSize="25dp" />
 
     <TextView
-        android:id="@+id/textusername"
+        android:id="@+id/textUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"

@@ -40,7 +40,7 @@ public class RecipeStepFragment extends Fragment {
         // Load step image
         if(step.hasImage()) {
             ImageView image = (ImageView) view.findViewById(R.id.imageStep);
-            image.setImageBitmap(FileHelper.getBitmap(getContext(), step.getImage()));
+            image.setImageBitmap(FileHelper.getBitmapFromBase64(step.getImage()));
         }
 
         // Load step title and description

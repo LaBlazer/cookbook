@@ -45,7 +45,7 @@ public class RecipeActivity extends AppCompatActivity {
         fab = findViewById(R.id.fabRecipe);
 
         if(getIntent().getSerializableExtra("recipe") != null) {
-            //recipe = (Recipe) getIntent().getSerializableExtra("recipe");
+            recipe = (Recipe) getIntent().getSerializableExtra("recipe");
         } else {
             Snackbar.make(fab, "Invalid activity extras",
                     Snackbar.LENGTH_LONG).show();

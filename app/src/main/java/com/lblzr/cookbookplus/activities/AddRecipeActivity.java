@@ -60,6 +60,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     Recipe recipe;
     StepsArrayAdapter stepsAdapter;
     IngredientsArrayAdapter ingredientsAdapter;
+    int durationMinutes = 0;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -101,6 +102,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                             txtInputTime.setText(String.format(Locale.ENGLISH, "%dh %dm", selectedHour, selectedMinute));
+                            durationMinutes = selectedHour * 60 + selectedMinute;
                         }
                     }, 0, 0, true);
                     mTimePicker.setTitle("Select Duration");
@@ -163,11 +165,17 @@ public class AddRecipeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(txtInputName.getText().toString().isEmpty() ||
-                txtInputTime.getText().toString().isEmpty() ||
-                steps.size() == 0 || ingredients.size() == 0) {
+                        durationMinutes == 0 || steps.size() == 0 || ingredients.size() == 0) {
                     Snackbar.make(fab, "Some fields are empty", Snackbar.LENGTH_SHORT).show();
                 } else {
-                    // Do stuff
+                    Intent data = getIntent();
+                    data.putExtra("name", txtInputName.getText().toString());
+                    data.putExtra("duration", durationMinutes);
+                    data.putExtra("image", photoFile != null ? photoFile.getName() : "");
+                    data.putExtra("steps", steps);
+                    data.putExtra("ingredients", ingredients);
+                    setResult(RESULT_OK, data);
+                    finish();
                 }
             }
         });
@@ -181,9 +189,8 @@ public class AddRecipeActivity extends AppCompatActivity {
             if (requestCode == REQUEST_CODE_CAMERA && photoFile != null){
                 Snackbar.make(fab, "Photo taken", Snackbar.LENGTH_SHORT).show();
 
-                Bitmap photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 btnRecipeImage.setPadding(0, 0, 0, 0);
-                btnRecipeImage.setImageBitmap(photo);
+                btnRecipeImage.setImageBitmap(FileHelper.getBitmap(photoFile));
 
             } else if(requestCode == REQUEST_CODE_INGREDIENT) {
                 Ingredient i = new Ingredient(

@@ -35,7 +35,7 @@ public class RecipeIngredientsFragment extends Fragment {
         // Load recipe image
         if(recipe.hasImage()) {
             ImageView image = (ImageView) view.findViewById(R.id.imageIngredient);
-            image.setImageBitmap(FileHelper.getBitmap(recipe.getImage()));
+            image.setImageBitmap(FileHelper.getBitmap(getContext(), recipe.getImage()));
         }
 
         // Load recipe ingredients

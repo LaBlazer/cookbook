@@ -87,7 +87,7 @@ public class AddStepActivity extends AppCompatActivity {
                 if(!txtInputName.getText().toString().isEmpty() && !txtInputDescription.getText().toString().isEmpty()) {
                     Intent data = getIntent();
                     data.putExtra("name", txtInputName.getText().toString());
-                    data.putExtra("image", photoFile != null ? photoFile.getPath() : "");
+                    data.putExtra("image", photoFile != null ? photoFile.getName() : "");
                     data.putExtra("description", txtInputDescription.getText().toString());
                     setResult(RESULT_OK, data);
                     finish();
@@ -103,9 +103,8 @@ public class AddStepActivity extends AppCompatActivity {
         Log.d("CBP", "Activity result");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == Activity.RESULT_OK && photoFile != null) {
-            Bitmap photo = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
             btnStepImage.setPadding(0, 0, 0, 0);
-            btnStepImage.setImageBitmap(photo);
+            btnStepImage.setImageBitmap(FileHelper.getBitmap(photoFile));
         }
     }
 

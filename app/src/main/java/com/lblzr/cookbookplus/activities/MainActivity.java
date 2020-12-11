@@ -1,5 +1,7 @@
 package com.lblzr.cookbookplus.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,8 +14,13 @@ import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.fragments.AboutFragment;
 import com.lblzr.cookbookplus.fragments.RecipeListFragment;
 import com.lblzr.cookbookplus.fragments.SettingsFragment;
+import com.lblzr.cookbookplus.helpers.FileHelper;
+import com.lblzr.cookbookplus.models.Ingredient;
+import com.lblzr.cookbookplus.models.Recipe;
+import com.lblzr.cookbookplus.models.Step;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.navigation.NavController;
@@ -24,7 +31,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, RecipeListFragment.RecipeSelectedListener {
+
+    private int REQUEST_CODE_RECIPE = 111;
 
     private DrawerLayout drawer;
     private FloatingActionButton fab;
@@ -47,9 +58,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recipeListFragment.addRecipe("Recipe " + ++id);
-                Snackbar.make(view, "Recipe added", Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                //recipeListFragment.addRecipe("Recipe " + ++id);
+
+                Intent data = new Intent(getApplicationContext(), AddRecipeActivity.class);
+//                data.putExtra("name", txtInputName.getText().toString());
+//                data.putExtra("amount", Float.parseFloat(txtInputAmount.getText().toString()));
+//                data.putExtra("unit", selectedUnit);
+//                data.putExtra("optional", checkOptional.isChecked());
+                startActivityForResult(data, REQUEST_CODE_RECIPE);
             }
         });
 
@@ -75,6 +91,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_RECIPE && resultCode == Activity.RESULT_OK) {
+
+            try {
+                Recipe r = new Recipe(
+                        data.getStringExtra("name"),
+                        (ArrayList<Ingredient>) data.getSerializableExtra("ingredients"),
+                        (ArrayList<Step>) data.getSerializableExtra("steps"),
+                        data.getStringExtra("image"),
+                        data.getIntExtra("duration", 0));
+                recipeListFragment.addRecipe(r);
+            } catch (Exception ex) {
+                Snackbar.make(fab, "Error while getting recipe", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -87,16 +122,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.nav_recipes:
+                fab.setVisibility(View.VISIBLE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMain,
                         recipeListFragment).commit();
                 setTitle("Recipes");
                 break;
             case R.id.nav_settings:
+                fab.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMain,
                         new SettingsFragment()).commit();
                 setTitle("Settings");
                 break;
             case R.id.nav_about:
+                fab.setVisibility(View.GONE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.flMain,
                         new AboutFragment()).commit();
                 setTitle("About");
@@ -111,18 +149,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onRecipeSelected(int id) {
+    public void onRecipeSelected(Recipe recipe) {
         toolbarDefault.setVisibility(View.GONE);
         toolbarSelect.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onRecipeClicked(int id) {
-        Snackbar.make(fab, "Clicked " + id, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+    public void onRecipeClicked(Recipe recipe) {
+        Intent data = new Intent(getApplicationContext(), RecipeActivity.class);
+        data.putExtra("recipe", recipe);
+        startActivity(data);
     }
 
     @Override
-    public void onRecipeDeselected(int id) {
+    public void onRecipeDeselected(Recipe recipe) {
         toolbarDefault.setVisibility(View.VISIBLE);
         toolbarSelect.setVisibility(View.GONE);
     }

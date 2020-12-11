@@ -16,20 +16,22 @@ import androidx.fragment.app.Fragment;
 
 import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.helpers.FileHelper;
+import com.lblzr.cookbookplus.helpers.RecipesArrayAdapter;
+import com.lblzr.cookbookplus.models.Recipe;
 
 import java.util.ArrayList;
 
 public class RecipeListFragment extends Fragment {
     public interface RecipeSelectedListener {
-        void onRecipeSelected(int id);
-        void onRecipeClicked(int id);
-        void onRecipeDeselected(int id);
+        void onRecipeSelected(Recipe recipe);
+        void onRecipeClicked(Recipe recipe);
+        void onRecipeDeselected(Recipe recipe);
     }
 
     RecipeSelectedListener selectedListener;
     ListView list;
-    ArrayList<String> recipes = new ArrayList<>();
-    ArrayAdapter<String> listAdapter;
+    ArrayList<Recipe> recipes = new ArrayList<>();
+    RecipesArrayAdapter arrayAdapter;
     long checkedItem;
 
     public RecipeListFragment() {
@@ -44,29 +46,24 @@ public class RecipeListFragment extends Fragment {
             selectedListener = (RecipeSelectedListener) getActivity();
     }
 
-    public void addRecipe(String recipe) {
+    public void addRecipe(Recipe recipe) {
         recipes.add(recipe);
-        listAdapter.notifyDataSetChanged();
+        arrayAdapter.notifyDataSetChanged();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listAdapter = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_list_item_activated_1,
-                recipes);
+        arrayAdapter = new RecipesArrayAdapter(getContext(), recipes);
 
         list = view.findViewById(R.id.listRecipes);
         list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         list.setItemsCanFocus(false);
-        list.setAdapter(listAdapter);
+        list.setAdapter(arrayAdapter);
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
                                            int pos, long id) {
-//                Log.d("CBP", "longclick pos = " + pos + ", id = " + id + " checked " + list.isItemChecked(pos));
-//                Log.d("CBP", "Checked " + list.getCheckedItemCount());
-//                Log.d("CBP", "Checked " + list.getCheckedItemPosition());
 
                 if (list.isItemChecked(pos)) {
                     list.setItemChecked(pos,false);
@@ -74,7 +71,7 @@ public class RecipeListFragment extends Fragment {
 
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeDeselected(pos);
+                        selectedListener.onRecipeDeselected(recipes.get(pos));
 
                 } else {
                     list.setItemChecked(pos,true);
@@ -82,7 +79,7 @@ public class RecipeListFragment extends Fragment {
 
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeSelected(pos);
+                        selectedListener.onRecipeSelected(recipes.get(pos));
 
                 }
 
@@ -94,20 +91,17 @@ public class RecipeListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int pos, long id) {
-//                Log.d("CBP", "itemClick: position = " + pos + ", id = " + id + " checked " + list.isItemChecked(pos));
-//                Log.d("CBP", "Checked " + list.getCheckedItemCount());
-//                Log.d("CBP", "Checked " + list.getCheckedItemPosition());
                 list.setItemChecked(pos, false);
 
                 if (checkedItem == -1) {
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeClicked(pos);
+                        selectedListener.onRecipeClicked(recipes.get(pos));
                 } else {
                     checkedItem = -1;
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeDeselected(pos);
+                        selectedListener.onRecipeDeselected(recipes.get(pos));
 
                 }
 

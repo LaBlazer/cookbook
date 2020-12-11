@@ -14,7 +14,7 @@
     <string name="title_activity_main">Main</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Test User</string>
+    <string name="nav_header_title">Unregistered</string>
     <string name="nav_header_subtitle">test.user@test.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -33,4 +33,8 @@
     <string name="step">Step Name</string>
     <string name="description">Description</string>
     <string name="ingredientName">Ingredient</string>
+    <string name="about_text">Made by LBLZR_\nCopyright 2020</string>
+    <string name="password">Password</string>
+    <string name="username">Email</string>
+    <string name="app_title">CookBook+ 🍔</string>
 </resources>

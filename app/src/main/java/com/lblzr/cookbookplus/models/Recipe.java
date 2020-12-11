@@ -9,24 +9,26 @@ public class Recipe implements Serializable {
     private ArrayList<Step> steps;
     private String name;
     private String image;
+    private int duration;
 
     public Recipe(String name) {
-        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), null);
+        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), null, 0);
     }
 
     public Recipe(String name, String image) {
-        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), image);
+        this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), image, 0);
     }
 
     public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps) {
-        this(name, ingredients, steps, null);
+        this(name, ingredients, steps, null, 0);
     }
 
-    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, String image) {
+    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, String image, int duration) {
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
         this.image = image;
+        this.duration = duration;
     }
 
     public void addIngredient(Ingredient ingredient) {
@@ -46,7 +48,7 @@ public class Recipe implements Serializable {
     }
 
     public boolean hasImage() {
-        return image != null;
+        return !image.isEmpty();
     }
 
     public void addStep(Step step) {

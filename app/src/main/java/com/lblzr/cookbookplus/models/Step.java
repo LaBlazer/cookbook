@@ -44,6 +44,6 @@ public class Step implements Serializable {
     }
 
     public boolean hasImage() {
-        return image != null;
+        return !image.isEmpty();
     }
 }

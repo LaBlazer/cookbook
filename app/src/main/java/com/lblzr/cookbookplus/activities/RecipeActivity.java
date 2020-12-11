@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.fragments.RecipeIngredientsFragment;
 import com.lblzr.cookbookplus.fragments.RecipeStepFragment;
+import com.lblzr.cookbookplus.models.AmountUnit;
 import com.lblzr.cookbookplus.models.Ingredient;
 import com.lblzr.cookbookplus.models.Recipe;
 import com.lblzr.cookbookplus.models.Step;
@@ -48,17 +49,8 @@ public class RecipeActivity extends AppCompatActivity {
         } else {
             Snackbar.make(fab, "Invalid activity extras",
                     Snackbar.LENGTH_LONG).show();
-            recipe = new Recipe("Fajnovy receptik", "varna.jpg");
-            recipe.addIngredient(new Ingredient("sodium hydroxide", 2, Ingredient.AmountUnit.PIECES));
-            recipe.addIngredient(new Ingredient("acetone", 0.42, Ingredient.AmountUnit.LITRES));
-            recipe.addIngredient(new Ingredient("hydrochloric acid", 1, Ingredient.AmountUnit.LITRES));
-            recipe.addIngredient(new Ingredient("sodium hydroxide", 200, Ingredient.AmountUnit.GRAMS));
-            recipe.addIngredient(new Ingredient("pseudoephedrine", 2000, Ingredient.AmountUnit.GRAMS));
-            recipe.addIngredient(new Ingredient("phosphorus", 6, Ingredient.AmountUnit.CUPS));
+            recipe = new Recipe("Fajnovy receptik", "test.jpg");
 
-            recipe.addStep(new Step("Vsetko zmiesame", "Jebneme to do sklenenej flasky a zmiesame."));
-            recipe.addStep(new Step("Vsetko uvarime", "Mmmm, uz se nam to kraaaasne deliii. To bude mnamka."));
-            recipe.addStep(new Step("Mame veci", "Daj si piko daj si piko pojde ti karta. Daj si piko daj si piko pojde ti karta. Mnam Mnam. MmmMMMm, ja to pikenko milujem....", "hqdefault (1).jpg"));
         }
 
         currentStep = 0;

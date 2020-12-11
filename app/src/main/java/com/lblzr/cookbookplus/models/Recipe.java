@@ -37,6 +37,14 @@ public class Recipe implements Serializable {
         return image;
     }
 
+    public ArrayList<Step> getSteps() {
+        return steps;
+    }
+
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
     public boolean hasImage() {
         return image != null;
     }

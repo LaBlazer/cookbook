@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.RecipeAddActivity"
+            android:name=".activities.AddRecipeActivity"
             android:label="Add Recipe"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.RecipeAddIngredient"
+            android:name=".activities.AddIngredientActivity"
             android:label="Add Ingredient"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
@@ -63,7 +63,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.RecipeAddStep"
+            android:name=".activities.AddStepActivity"
             android:label="Add Step"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait">

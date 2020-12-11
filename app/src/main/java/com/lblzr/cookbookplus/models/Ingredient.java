@@ -1,15 +1,10 @@
 package com.lblzr.cookbookplus.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Ingredient implements Serializable {
-    public enum AmountUnit {
-        GRAMS,
-        LITRES,
-        CUPS,
-        PIECES
-    }
 
     private String name;
     private double amount;
@@ -27,13 +22,36 @@ public class Ingredient implements Serializable {
         this(name, amount, unit, false);
     }
 
-
     public String getName() {
         return name;
     }
 
     public double getAmount() {
         return amount;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
+    }
+
+    public void setUnit(AmountUnit unit) {
+        this.unit = unit;
+    }
+
+    public AmountUnit getUnit() {
+        return unit;
     }
 
     private static String formatDouble(double d)
@@ -77,6 +95,7 @@ public class Ingredient implements Serializable {
 
     @Override
     public String toString() {
-        return String.format(Locale.ENGLISH, "%s of %s", getAmountString(), name);
+        return String.format(Locale.ENGLISH, "%s%s of %s", optional ? "(optional) " : "",
+                getAmountString(), name);
     }
 }

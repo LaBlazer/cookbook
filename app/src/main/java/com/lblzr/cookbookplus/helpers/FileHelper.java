@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.lblzr.cookbookplus.R;
@@ -29,11 +30,13 @@ public class FileHelper {
         return null;
     }
 
-    public static File createTempImageFile(Context context) throws IOException {
+    public static File createImageFile(Context context) throws IOException {
         String imageFileName = "cbp_" + UUID.randomUUID().toString();
         File storageDir = context.getExternalFilesDir("recipes");
         storageDir.mkdirs();
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        Log.d("CBP","Created image file at " + image.getAbsolutePath());
 
         return image;
     }

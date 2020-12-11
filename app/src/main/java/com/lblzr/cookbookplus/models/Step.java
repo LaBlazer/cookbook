@@ -31,6 +31,18 @@ public class Step implements Serializable {
         return image;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public boolean hasImage() {
         return image != null;
     }

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -40,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     private FloatingActionButton fab;
-    private Toolbar toolbarDefault;
-    private Toolbar toolbarSelect;
+    private Toolbar toolbar;
     private RecipeListFragment recipeListFragment;
 
     private int id = 0;
@@ -54,9 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Delete old images
         FileHelper.deleteFiles(getApplicationContext(), "jpg");
 
-        toolbarSelect = findViewById(R.id.toolbarSelect);
-        toolbarDefault = findViewById(R.id.toolbarDefault);
-        setSupportActionBar(toolbarDefault);
+        toolbar = findViewById(R.id.toolbarDefault);
+        setSupportActionBar(toolbar);
 
         // Update username
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -71,20 +71,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //recipeListFragment.addRecipe("Recipe " + ++id);
-
                 Intent data = new Intent(getApplicationContext(), RecipeEditActivity.class);
-//                data.putExtra("name", txtInputName.getText().toString());
-//                data.putExtra("amount", Float.parseFloat(txtInputAmount.getText().toString()));
-//                data.putExtra("unit", selectedUnit);
-//                data.putExtra("optional", checkOptional.isChecked());
                 startActivityForResult(data, REQUEST_CODE_RECIPE);
             }
         });
 
         drawer = findViewById(R.id.drawer_layout);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbarDefault,
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -105,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             try {
                 // Convert images to base64 and create recipe object
-
                 ArrayList<Step> steps = (ArrayList<Step>) data.getSerializableExtra("steps");
                 for(Step s : steps) {
                     s.setImage(FileHelper.getBase64FromBitmap(FileHelper.getBitmap(getApplicationContext(), s.getImage())));
@@ -133,6 +126,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.share:
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/*");
+                share.putExtra(Intent.EXTRA_STREAM, FileHelper.getUri(getApplicationContext(), RecipeStore.getCurrentRecipe().getFile()));
+                startActivity(Intent.createChooser(share, "Share recipe with"));
+                break;
+            case R.id.delete:
+                //RecipeStore.removeRecipe(RecipeStore.getCurrentRecipe());
+                break;
+            case R.id.edit:
+                break;
+        }
+
+        return true;
     }
 
     @Override
@@ -164,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRecipeSelected(Recipe recipe) {
-        toolbarDefault.setVisibility(View.GONE);
-        toolbarSelect.setVisibility(View.VISIBLE);
+        toolbar.inflateMenu(R.menu.toolbar_select_menu);
+        RecipeStore.setCurrentRecipe(recipe);
     }
 
     @Override
@@ -177,8 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRecipeDeselected(Recipe recipe) {
-        toolbarDefault.setVisibility(View.VISIBLE);
-        toolbarSelect.setVisibility(View.GONE);
+        toolbar.getMenu().clear();
     }
 
 }

@@ -2,17 +2,7 @@ package com.lblzr.cookbookplus.activities;
 
 import android.Manifest;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.lblzr.cookbookplus.R;
-import com.lblzr.cookbookplus.fragments.RecipeIngredientsFragment;
-import com.lblzr.cookbookplus.fragments.RecipeStepFragment;
-import com.lblzr.cookbookplus.helpers.RecipeStore;
-import com.lblzr.cookbookplus.models.AmountUnit;
-import com.lblzr.cookbookplus.models.Ingredient;
-import com.lblzr.cookbookplus.models.Recipe;
-import com.lblzr.cookbookplus.models.Step;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -21,7 +11,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.view.View;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lblzr.cookbookplus.R;
+import com.lblzr.cookbookplus.fragments.RecipeIngredientsFragment;
+import com.lblzr.cookbookplus.fragments.RecipeStepFragment;
+import com.lblzr.cookbookplus.helpers.RecipeStore;
+import com.lblzr.cookbookplus.models.Recipe;
 
 import java.util.ArrayList;
 

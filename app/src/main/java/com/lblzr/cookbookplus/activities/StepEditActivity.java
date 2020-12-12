@@ -70,9 +70,7 @@ public class StepEditActivity extends AppCompatActivity {
                     }
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(StepEditActivity.this,
-                                "com.example.android.fileprovider",
-                                photoFile);
+                        Uri photoURI = FileHelper.getUri(getApplicationContext(), photoFile);
                         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
                     }

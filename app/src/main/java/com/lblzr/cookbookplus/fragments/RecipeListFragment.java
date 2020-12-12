@@ -1,27 +1,19 @@
 package com.lblzr.cookbookplus.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.lblzr.cookbookplus.R;
-import com.lblzr.cookbookplus.helpers.FileHelper;
-import com.lblzr.cookbookplus.helpers.RecipeSerializer;
+import com.lblzr.cookbookplus.helpers.RecipeStore;
 import com.lblzr.cookbookplus.helpers.RecipesArrayAdapter;
 import com.lblzr.cookbookplus.models.Recipe;
-
-import java.io.File;
-import java.util.ArrayList;
 
 public class RecipeListFragment extends Fragment {
     public interface RecipeSelectedListener {
@@ -32,9 +24,8 @@ public class RecipeListFragment extends Fragment {
 
     RecipeSelectedListener selectedListener;
     ListView list;
-    ArrayList<Recipe> recipes;
     RecipesArrayAdapter arrayAdapter;
-    long checkedItem;
+    long checkedItem = -1;
 
     public RecipeListFragment() {
         super(R.layout.fragment_recipe_list);
@@ -49,7 +40,7 @@ public class RecipeListFragment extends Fragment {
     }
 
     public void addRecipe(Recipe recipe) {
-        recipes.add(recipe);
+        RecipeStore.addRecipe(recipe);
         arrayAdapter.notifyDataSetChanged();
     }
 
@@ -57,9 +48,8 @@ public class RecipeListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Load saved recipes
-        recipes = RecipeSerializer.LoadAll(getContext());
-
-        arrayAdapter = new RecipesArrayAdapter(getContext(), recipes);
+        RecipeStore.loadRecipes(getContext());
+        arrayAdapter = new RecipesArrayAdapter(getContext(), RecipeStore.getRecipes());
 
         list = view.findViewById(R.id.listRecipes);
         list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
@@ -76,7 +66,7 @@ public class RecipeListFragment extends Fragment {
 
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeDeselected(recipes.get(pos));
+                        selectedListener.onRecipeDeselected(RecipeStore.getRecipe(pos));
 
                 } else {
                     list.setItemChecked(pos,true);
@@ -84,7 +74,7 @@ public class RecipeListFragment extends Fragment {
 
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeSelected(recipes.get(pos));
+                        selectedListener.onRecipeSelected(RecipeStore.getRecipe(pos));
 
                 }
 
@@ -101,12 +91,12 @@ public class RecipeListFragment extends Fragment {
                 if (checkedItem == -1) {
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeClicked(recipes.get(pos));
+                        selectedListener.onRecipeClicked(RecipeStore.getRecipe(pos));
                 } else {
                     checkedItem = -1;
                     // callback
                     if(selectedListener != null)
-                        selectedListener.onRecipeDeselected(recipes.get(pos));
+                        selectedListener.onRecipeDeselected(RecipeStore.getRecipe(pos));
 
                 }
 

@@ -11,15 +11,12 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarDefault"
-            layout="@layout/toolbar_default"
-            android:visibility="visible" />
-
-        <include
-            android:id="@+id/toolbarSelect"
-            layout="@layout/toolbar_select"
-            android:visibility="gone" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            />
 
     </com.google.android.material.appbar.AppBarLayout>
 

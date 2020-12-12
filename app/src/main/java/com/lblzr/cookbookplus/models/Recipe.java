@@ -1,7 +1,9 @@
 package com.lblzr.cookbookplus.models;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Recipe implements Serializable {
 
@@ -10,6 +12,8 @@ public class Recipe implements Serializable {
     private String name;
     private String image;
     private int duration;
+
+    private File file;
 
     public Recipe(String name) {
         this(name, new ArrayList<Ingredient>(), new ArrayList<Step>(), null, 0);
@@ -24,11 +28,17 @@ public class Recipe implements Serializable {
     }
 
     public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, String image, int duration) {
+        this(name, ingredients, steps, image, duration, null);
+    }
+
+    public Recipe(String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, String image,
+                  int duration, File file) {
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
         this.image = image;
         this.duration = duration;
+        this.file = file;
     }
 
     public void setName(String name) {
@@ -51,6 +61,14 @@ public class Recipe implements Serializable {
         this.steps = steps;
     }
 
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
     public void addIngredient(Ingredient ingredient) {
         ingredients.add(ingredient);
     }
@@ -68,7 +86,7 @@ public class Recipe implements Serializable {
     }
 
     public boolean hasImage() {
-        return !image.isEmpty();
+        return image != null && !image.isEmpty();
     }
 
     public void addStep(Step step) {
@@ -99,5 +117,19 @@ public class Recipe implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Recipe recipe = (Recipe) o;
+        return Objects.equals(name, recipe.name) &&
+                Objects.equals(file.getName(), recipe.file.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, file.getName());
     }
 }

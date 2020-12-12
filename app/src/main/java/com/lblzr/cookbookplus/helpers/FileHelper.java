@@ -3,12 +3,13 @@ package com.lblzr.cookbookplus.helpers;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.ImageView;
 
-import com.lblzr.cookbookplus.R;
+import androidx.core.content.FileProvider;
+
+import com.lblzr.cookbookplus.activities.RecipeEditActivity;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -45,6 +46,12 @@ public class FileHelper {
     public static File getFile(Context context, String file) {
         File storageDir = context.getExternalFilesDir("recipes");
         return new File(storageDir, file);
+    }
+
+    public static Uri getUri(Context context, File file) {
+        return FileProvider.getUriForFile(context,
+                "com.lblzr.cookbookplus.fileprovider",
+                file);
     }
 
     public static void writeString(Context context, String file, String string) {

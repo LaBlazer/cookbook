@@ -1,6 +1,5 @@
 package com.lblzr.cookbookplus.helpers;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
@@ -16,7 +15,6 @@ import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
@@ -77,7 +75,9 @@ public class RecipeSerializer {
         try {
             XmlPullParser parser = Xml.newPullParser();
             parser.setInput(FileHelper.getReader(file));
-            return readRecipe(parser);
+            Recipe r = readRecipe(parser);
+            r.setFile(file);
+            return r;
 
         } catch (Exception ex) {
             Log.e("CBP", "Exception while parsing recipe: " + ex.toString());

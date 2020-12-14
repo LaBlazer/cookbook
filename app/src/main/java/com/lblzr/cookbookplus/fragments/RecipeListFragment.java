@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 
 import com.lblzr.cookbookplus.R;
 import com.lblzr.cookbookplus.helpers.RecipeStore;
-import com.lblzr.cookbookplus.helpers.RecipesArrayAdapter;
 import com.lblzr.cookbookplus.models.Recipe;
 
 public class RecipeListFragment extends Fragment {
@@ -24,7 +23,7 @@ public class RecipeListFragment extends Fragment {
 
     RecipeSelectedListener selectedListener;
     ListView list;
-    RecipesArrayAdapter arrayAdapter;
+
     long checkedItem = -1;
 
     public RecipeListFragment() {
@@ -41,7 +40,6 @@ public class RecipeListFragment extends Fragment {
 
     public void addRecipe(Recipe recipe) {
         RecipeStore.addRecipe(recipe);
-        arrayAdapter.notifyDataSetChanged();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -49,12 +47,11 @@ public class RecipeListFragment extends Fragment {
 
         // Load saved recipes
         RecipeStore.loadRecipes(getContext());
-        arrayAdapter = new RecipesArrayAdapter(getContext(), RecipeStore.getRecipes());
 
         list = view.findViewById(R.id.listRecipes);
         list.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         list.setItemsCanFocus(false);
-        list.setAdapter(arrayAdapter);
+        list.setAdapter(RecipeStore.getAdapter());
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1,

@@ -138,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(Intent.createChooser(share, "Share recipe with"));
                 break;
             case R.id.delete:
-                //RecipeStore.removeRecipe(RecipeStore.getCurrentRecipe());
+                Recipe r = RecipeStore.getCurrentRecipe();
+                RecipeStore.removeRecipe(r);
+                onRecipeDeselected(r);
                 break;
             case R.id.edit:
                 break;

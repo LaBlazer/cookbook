@@ -1,8 +1,11 @@
 package com.lblzr.cookbookplus.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -29,7 +32,7 @@ public class RecipeViewActivity extends AppCompatActivity {
     final int REQUEST_CODE_STORAGE = 666;
 
     private int currentStep;
-    private Recipe recipe;
+    private final Recipe recipe = RecipeStore.getCurrentRecipe();
     private ArrayList<Fragment> fragments;
 
     FloatingActionButton fab;
@@ -43,8 +46,9 @@ public class RecipeViewActivity extends AppCompatActivity {
 
         final MediaPlayer pop = MediaPlayer.create(this, R.raw.pop);
         final MediaPlayer finish = MediaPlayer.create(this, R.raw.finish);
+        final Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        final long[] vibrationPattern = {0, 77, 77, 77, 77, 77, 77, 77, 77, 77};
 
-        recipe = RecipeStore.getCurrentRecipe();
         currentStep = 0;
 
         // Create array of step fragments
@@ -58,8 +62,10 @@ public class RecipeViewActivity extends AppCompatActivity {
                     // switch step
                     if(++currentStep == recipe.getStepAmount()) {
                         finish.start();
+                        v.vibrate(VibrationEffect.createWaveform(vibrationPattern, -1));
                     } else {
                         pop.start();
+                        v.vibrate(VibrationEffect.createOneShot(50, 50));
                     }
 
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

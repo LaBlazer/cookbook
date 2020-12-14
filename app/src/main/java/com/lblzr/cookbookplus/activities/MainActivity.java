@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -104,14 +105,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     s.setImage(FileHelper.getBase64FromBitmap(FileHelper.getBitmap(getApplicationContext(), s.getImage())));
                 }
 
-                Recipe r = new Recipe(
+                final Recipe r = new Recipe(
                         data.getStringExtra("name"),
                         (ArrayList<Ingredient>) data.getSerializableExtra("ingredients"),
                         steps,
                         FileHelper.getBase64FromBitmap(FileHelper.getBitmap(getApplicationContext(), data.getStringExtra("image"))),
                         data.getIntExtra("duration", 0));
                 // Save the recipe and add it to the list
-                RecipeSerializer.Save(getApplicationContext(), r);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RecipeSerializer.Save(getApplicationContext(), r);
+                    }
+                }).start();
                 recipeListFragment.addRecipe(r);
             } catch (Exception ex) {
                 Snackbar.make(fab, "Error while getting recipe", Snackbar.LENGTH_LONG).show();
@@ -193,6 +199,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onRecipeDeselected(Recipe recipe) {
         toolbar.getMenu().clear();
+    }
+
+    public class SerializeAndSave implements Runnable {
+
+        private Recipe recipe;
+
+        public SerializeAndSave(Recipe r) {
+            this.recipe = r;
+        }
+
+        public void run() {
+
+        }
     }
 
 }

@@ -71,8 +71,10 @@ public class FileHelper {
 
         try {
             String line;
-            BufferedReader in = new BufferedReader(new FileReader(getFile(context, file)));
+            FileReader reader = new FileReader(getFile(context, file));
+            BufferedReader in = new BufferedReader(reader);
             while ((line = in.readLine()) != null) sb.append(line);
+            reader.close();
         }
         catch (IOException ex) {
             Log.e("CBP", "Failed to read file: " + ex.toString());

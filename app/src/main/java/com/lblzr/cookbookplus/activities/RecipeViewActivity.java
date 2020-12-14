@@ -1,6 +1,7 @@
 package com.lblzr.cookbookplus.activities;
 
 import android.Manifest;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 
@@ -40,6 +41,9 @@ public class RecipeViewActivity extends AppCompatActivity {
         initActionBar();
         fab = findViewById(R.id.fabRecipe);
 
+        final MediaPlayer pop = MediaPlayer.create(this, R.raw.pop);
+        final MediaPlayer finish = MediaPlayer.create(this, R.raw.finish);
+
         recipe = RecipeStore.getCurrentRecipe();
         currentStep = 0;
 
@@ -52,7 +56,11 @@ public class RecipeViewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(currentStep < recipe.getStepAmount()) {
                     // switch step
-                    currentStep++;
+                    if(++currentStep == recipe.getStepAmount()) {
+                        finish.start();
+                    } else {
+                        pop.start();
+                    }
 
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
@@ -90,7 +98,7 @@ public class RecipeViewActivity extends AppCompatActivity {
     }
 
     private void updateTitle() {
-        setTitle(currentStep == 0 ? recipe.getName() : "Step " + currentStep);
+        setTitle(currentStep <= 0 ? recipe.getName() : "Step " + currentStep);
 
         if(currentStep == recipe.getStepAmount()) {
             fab.setVisibility(View.GONE);

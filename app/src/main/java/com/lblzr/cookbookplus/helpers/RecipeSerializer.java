@@ -14,7 +14,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
@@ -74,8 +76,10 @@ public class RecipeSerializer {
 
         try {
             XmlPullParser parser = Xml.newPullParser();
-            parser.setInput(FileHelper.getReader(file));
+            Reader in = FileHelper.getReader(file);
+            parser.setInput(in);
             Recipe r = readRecipe(parser);
+            in.close();
             r.setFile(file);
             return r;
 

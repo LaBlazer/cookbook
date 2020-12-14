@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/list_bg" />
+
+    <item android:state_enabled="true" android:state_focused="true" android:drawable="@color/listSelected" />
+    <item android:state_enabled="true" android:state_selected="true" android:drawable="@color/listSelected" />
+    <item android:state_activated="true" android:drawable="@color/listSelected" />
+
+    <item android:drawable="@android:color/transparent"/>
 </selector>

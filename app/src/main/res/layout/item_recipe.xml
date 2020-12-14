@@ -7,5 +7,5 @@
     android:textSize="30sp"
     android:padding="5sp"
     android:textColor="@color/colorText"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/list_selector"
     />

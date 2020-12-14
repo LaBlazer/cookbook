@@ -176,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRecipeSelected(Recipe recipe) {
-        toolbar.inflateMenu(R.menu.toolbar_select_menu);
+        if(toolbar.getMenu().size() == 0)
+            toolbar.inflateMenu(R.menu.toolbar_select_menu);
         RecipeStore.setCurrentRecipe(recipe);
     }
 
